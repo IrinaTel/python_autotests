@@ -13,14 +13,13 @@ response_creating_pokemon = requests.post(f'{base_url}pokemons', headers={"train
 
 print(response_creating_pokemon.text)
 
-pokemon_id = response_creating_pokemon.json()['id'] #пихаю id покемона в переменную, чтобы потом передать его в запросе на изменение имени
-print(str(pokemon_id))
-print(f'"{pokemon_id}"')
+
+new_pokemon = response_creating_pokemon.json() #кладу json-ответ созданного покемона
 
 #меняю имя созданного покемона
 
 response_change_name = requests.put(f'{base_url}pokemons', headers={"trainer_token": token},json = {
-    "pokemon_id": "9693",
+    "pokemon_id": f"{new_pokemon['id']}",
     "name": "New кулебка",
 })
 
@@ -28,7 +27,7 @@ print(response_change_name.text)
 
 
 response_pokeball = requests.post(f'{base_url}trainers/add_pokeball', headers={"trainer_token":token}, json = {
-    "pokemon_id": "9693"
+    "pokemon_id": f"{new_pokemon['id']}"
 })
 
 print(response_pokeball.text)
